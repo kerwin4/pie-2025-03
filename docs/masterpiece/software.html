@@ -492,6 +492,90 @@
           </div>
         </div>
 
+         <div class="row gtr-150">
+          <div class="col-12">
+            <header class="major" style="text-align:center;">
+              <h2>Board Sensing</h2>
+            </header>
+
+            <p>
+To detect human moves, we read the Hall-effect sensors under each square through MCP23017 I/O expanders on a shared I²C bus (addresses 0x20–0x27). Each expander provides 16 digital inputs (GPIOA/GPIOB), and the Arduino configures all pins as inputs with pull-ups enabled. During an update, the Arduino reads GPIOA and GPIOB once per expander and converts the raw port bytes into a 10×12 occupancy matrix. The mapping from physical squares to specific expander pins is stored as a lookup table (generated from a spreadsheet) and packed into a compact format: (expander index, port A/B, bit 0–7). For each square, the software uses this packed mapping to extract the correct bit from the correct expander port and outputs a 1/0 value indicating whether a magnet (and therefore a piece) is present. Our original vision was for the Arduino to communicate this board state to the Raspberry Pi over serial, which is why the Pi can request a fresh snapshot by sending the keyword “chessatron.” Upon receiving it, the Arduino prints the matrix as CSV for easy parsing.
+            </p>
+
+            <p style="text-align:center;">
+Address range + magnet polarity
+            </p>
+          
+            <span class="image fit">
+                <img
+                  src="images/software20.jpg"
+                  alt="End effector and magnet carriage"
+                  style="width:40% !important; height:auto; display:block; margin:0 auto;"
+                />
+              </span>
+              <p style="text-align:center;">
+                The packed mapping explanation + MAP definition
+              </p>
+              <span class="image fit">
+                <img
+                  src="images/software21.jpg"
+                  alt="End effector and magnet carriage"
+                  style="width:40% !important; height:auto; display:block; margin:0 auto;"
+                />
+              </span>
+              <p style="text-align:center;">
+                Configuring MCP23017 inputs + pull-ups
+
+              </p>
+               <span class="image fit">
+                <img
+                  src="images/software22.jpg"
+                  alt="End effector and magnet carriage"
+                  style="width:40% !important; height:auto; display:block; margin:0 auto;"
+                />
+              </span>
+              <p style="text-align:center;">
+Read each expander once
+
+              </p>
+               <span class="image fit">
+                <img
+                  src="images/software23.jpg"
+                  alt="End effector and magnet carriage"
+                  style="width:40% !important; height:auto; display:block; margin:0 auto;"
+                />
+              </span>
+              <p style="text-align:center;">
+Decode mapping → bit → matrix output
+
+              </p>
+               <span class="image fit">
+                <img
+                  src="images/software24.jpg"
+                  alt="End effector and magnet carriage"
+                  style="width:40% !important; height:auto; display:block; margin:0 auto;"
+                />
+              </span>
+              <p style="text-align:center;">
+Lookup Table For Square To Expander Mapping
+
+              </p>
+               <span class="image fit">
+                <img
+                  src="images/software25.jpg"
+                  alt="End effector and magnet carriage"
+                  style="width:40% !important; height:auto; display:block; margin:0 auto;"
+                />
+              </span>
+              <p>
+This lookup sheet was created after soldering and wiring the boards to make it easier to index each physical square to its corresponding MCP23017 expander/port/bit during software development.
+
+              </p>
+
+            
+          </div>
+        </div>
+
 
     <style>
   a.dep-link, a.github-link {
